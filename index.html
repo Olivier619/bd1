@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD Creator - Créez votre bande dessinée avec l'IA</title>
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3, h4 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        /* Header */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        /* Sections */
+        .section {
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Formulaires */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button, .btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover, .btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Navigation */
+        .tabs {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tabs li {
+            margin-right: 10px;
+        }
+        
+        .tabs a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .tabs a.active {
+            border-color: #ddd;
+            background-color: white;
+            margin-bottom: -1px;
+            padding-bottom: 11px;
+        }
+        
+        /* Contenu des onglets */
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .pagination button {
+            margin: 0 5px;
+            background-color: #3498db;
+        }
+        
+        .pagination button:hover {
+            background-color: #2980b9;
+        }
+        
+        .page-number {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+        
+        /* Features */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .feature {
+            flex: 0 0 30%;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .feature h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .feature {
+                flex: 0 0 100%;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tabs li {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+            
+            .tabs a.active {
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 10px;
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>BD Creator</h1>
+            <p>Créez votre bande dessinée avec l'assistance de l'IA</p>
+            <button id="generateBtn">Générer un scénario</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="section" id="how-it-works">
+            <h2>Comment ça marche</h2>
+            <p>BD Creator utilise l'intelligence artificielle pour vous aider à créer une bande dessinée complète en quelques clics. Entrez simplement quelques mots-clés, et notre système générera un scénario complet, un storyboard détaillé et des prompts optimisés pour Midjourney.</p>
+            
+            <div class="form-group">
+                <label for="keywords">Entrez vos mots-clés (séparés par des virgules)</label>
+                <input type="text" id="keywords" placeholder="Ex: science-fiction, robots, dystopie, rébellion">
+            </div>
+            
+            <div class="session-controls">
+                <button id="newSessionBtn">Nouvelle session</button>
+                <button id="saveSessionBtn">Sauvegarder la session</button>
+                <button id="loadSessionBtn">Charger une session</button>
+            </div>
+        </section>
+        
+        <hr>
+        
+        <section class="section" id="content-section">
+            <ul class="tabs">
+                <li><a href="#scenario" class="tab-link active" data-tab="scenario">Scénario</a></li>
+                <li><a href="#storyboard" class="tab-link" data-tab="storyboard">Storyboard</a></li>
+                <li><a href="#prompts" class="tab-link" data-tab="prompts">Prompts</a></li>
+            </ul>
+            
+            <div id="scenario" class="tab-content active">
+                <h2>Scénario</h2>
+                <div id="scenario-content">
+                    <p>Votre scénario apparaîtra ici après génération.</p>
+                </div>
+                <div class="pagination">
+                    <button id="prevScenarioPage">Précédent</button>
+                    <span class="page-number" id="scenarioPageNumber">Page 1 / 48</span>
+                    <button id="nextScenarioPage">Suivant</button>
+                </div>
+            </div>
+            
+            <div id="storyboard" class="tab-content">
+                <h2>Storyboard</h2>
+                <div id="storyboard-content">
+                    <p>Votre storyboard apparaîtra ici après génération.</p>
+                </div>
+                <div class="pagination">
+                    <button id="prevStoryboardPage">Précédent</button>
+                    <span class="page-number" id="storyboardPageNumber">Page 1 / 48</span>
+                    <button id="nextStoryboardPage">Suivant</button>
+                </div>
+            </div>
+            
+            <div id="prompts" class="tab-content">
+                <h2>Prompts pour Midjourney</h2>
+                <div id="prompts-content">
+                    <p>Vos prompts apparaîtront ici après génération.</p>
+                </div>
+                <div class="pagination">
+                    <button id="prevPromptPage">Précédent</button>
+                    <span class="page-number" id="promptPageNumber">Page 1 / 48</span>
+                    <button id="nextPromptPage">Suivant</button>
+                </div>
+            </div>
+        </section>
+        
+        <hr>
+        
+        <section class="section" id="features-section">
+            <h2>Fonctionnalités</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>Génération de scénario</h3>
+                    <p>Entrez quelques mots-clés et notre IA générera un scénario complet pour votre bande dessinée de 48 pages, avec une histoire captivante et des personnages mémorables.</p>
+                </div>
+                <div class="feature">
+                    <h3>Création de storyboard</h3>
+                    <p>Transformez votre scénario en storyboard détaillé, avec 3 à 7 cases par page, des descriptions précises des scènes, des personnages et des dialogues.</p>
+                </div>
+                <div class="feature">
+                    <h3>Génération de prompts</h3>
+                    <p>Obtenez des prompts optimisés pour Midjourney ou d'autres IA de génération d'images, afin de créer les illustrations parfaites pour chaque case de votre BD.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        // Fonctions de génération de contenu
+        function generateStoryboard(story, randomSeed) {
+            // Initialisation du générateur de nombres aléatoires avec le seed
+            Math.seedrandom(randomSeed);
+            
+            const storyboard = {
+                title: story.title,
+                pages: []
+            };
+            
+            // Répartition des chapitres sur les 48 pages
+            const chaptersCount = story.chapters.length;
+            const pagesPerChapter = Math.floor(48 / chaptersCount);
+            let remainingPages = 48 - (pagesPerChapter * chaptersCount);
+            
+            let currentPage = 0;
+            
+            // Création de la page de couverture
+            storyboard.pages.push({
+                pageNumber: currentPage + 1,
+                description: `Page de couverture présentant le titre "${story.title}" avec une illustration frappante qui capture l'essence de l'histoire. On peut y voir ${story.protagonist.name} dans un moment dramatique lié à ${story.keywords[0]}.`,
+                panels: [
+                    {
+                        description: `Illustration principale montrant ${story.protagonist.name} face à un élément symbolisant ${story.keywords[0]}.`,
+                        dialogue: ""
+                    }
+                ]
+            });
+            
+            currentPage++;
+            
+            // Page d'introduction des personnages
+            storyboard.pages.push({
+                pageNumber: currentPage + 1,
+                description: `Page d'introduction présentant les personnages principaux de l'histoire.`,
+                panels: [
+                    {
+                        description: `Portrait de ${story.protagonist.name}: ${story.protagonist.description}`,
+                        dialogue: ""
+                    },
+                    {
+                        description: `Portrait de ${story.antagonist.name}: ${story.antagonist.description}`,
+                        dialogue: ""
+                    },
+                    {
+                        description: `Aperçu du monde de l'histoire, montrant ${story.mainLocation} avec ses caractéristiques uniques.`,
+                        dialogue: ""
+                    }
+                ]
+            });
+            
+            currentPage++;
+            
+            // Génération des pages pour chaque chapitre
+            for (let i = 0; i < chaptersCount; i++) {
+                const chapter = story.chapters[i];
+                let pagesToAllocate = pagesPerChapter;
+                
+                // Distribuer les pages restantes
+                if (remainingPages > 0) {
+                    pagesToAllocate++;
+                    remainingPages--;
+                }
+                
+                // Créer les pages pour ce chapitre
+                for (let j = 0; j < pagesToAllocate; j++) {
+                    const pageNumber = currentPage + 1;
+                    const isFirstPage = j === 0;
+                    const isLastPage = j === pagesToAllocate - 1;
+                    
+                    // Nombre de panels par page (entre 3 et 7)
+                    const panelsCount = Math.floor(Math.random() * 5) + 3;
+                    
+                    const panels = [];
+                    
+                    // Générer les panels pour cette page
+                    for (let k = 0; k < panelsCount; k++) {
+                        // Créer une description de panel basée sur le contenu du chapitre
+                        const chapterContent = chapter.content;
+                        const contentLines = chapterContent.split('\n').filter(line => line.trim() !== '');
+                        
+                        // Sélectionner une partie du contenu pour ce panel
+                        const lineIndex = Math.floor(Math.random() * contentLines.length);
+                        const contentLine = contentLines[lineIndex];
+                        
+                        // Générer une description de panel
+                        let panelDescription = "";
+                        
+                        if (isFirstPage && k === 0) {
+                            // Premier panel du chapitre
+                            panelDescription = `Titre du chapitre: "${chapter.title}". ${contentLine}`;
+                        } else {
+                            // Autres panels
+                            const actions = [
+                                "regarde", "observe", "découvre", "affronte", "discute avec", 
+                                "réfléchit à", "analyse", "explore", "examine", "contemple"
+                            ];
+                            const emotions = [
+                                "inquiétude", "détermination", "surprise", "colère", "joie", 
+                                "tristesse", "confusion", "espoir", "peur", "soulagement"
+                            ];
+                            const angles = [
+                                "gros plan", "plan large", "vue d'ensemble", "contre-plongée", 
+                                "plongée", "profil", "face", "trois-quarts", "arrière-plan flou"
+                            ];
+                            
+                            const action = actions[Math.floor(Math.random() * actions.length)];
+                            const emotion = emotions[Math.floor(Math.random() * emotions.length)];
+                            const angle = angles[Math.floor(Math.random() * angles.length)];
+                            
+                            if (Math.random() > 0.5) {
+                                panelDescription = `${angle.charAt(0).toUpperCase() + angle.slice(1)} sur ${story.protagonist.name} qui ${action} avec ${emotion}. ${contentLine}`;
+                            } else if (Math.random() > 0.3) {
+                                panelDescription = `${angle.charAt(0).toUpperCase() + angle.slice(1)} montrant ${story.antagonist.name} qui ${action}. ${contentLine}`;
+                            } else {
+                                panelDescription = `${angle.charAt(0).toUpperCase() + angle.slice(1)} de la scène où ${contentLine}`;
+                            }
+                        }
+                        
+                        // Générer un dialogue (50% de chance)
+                        let dialogue = "";
+                        if (Math.random() > 0.5) {
+                            const dialogueStarters = [
+                                "Je ne comprends pas pourquoi", "Il faut absolument", "Est-ce que tu penses que",
+                                "Je n'aurais jamais cru que", "Nous devons trouver", "Comment pouvons-nous",
+                                "Je me demande si", "Qu'est-ce que cela signifie", "Je ne peux pas accepter que",
+                                "Regarde ce que j'ai découvert"
+                            ];
+                            
+                            const starter = dialogueStarters[Math.floor(Math.random() * dialogueStarters.length)];
+                            
+                            if (Math.random() > 0.5) {
+                                dialogue = `${story.protagonist.name}: "${starter} ${story.keywords[Math.floor(Math.random() * story.keywords.length)]}..."`;
+                            } else {
+                                dialogue = `${story.antagonist.name}: "${starter} ${story.keywords[Math.floor(Math.random() * story.keywords.length)]}..."`;
+                            }
+                        }
+                        
+                        panels.push({
+                            description: panelDescription,
+                            dialogue: dialogue
+                        });
+                    }
+                    
+                    storyboard.pages.push({
+                        pageNumber: pageNumber,
+                        description: `Page ${pageNumber}: ${isFirstPage ? "Début du chapitre " + (i+1) + ": " + chapter.title : "Suite du chapitre " + (i+1)}`,
+                        panels: panels
+                    });
+                    
+                    currentPage++;
+                }
+            }
+            
+            return storyboard;
+        }
+        
+        function generatePrompts(storyboard, randomSeed) {
+            // Initialisation du générateur de nombres aléatoires avec le seed
+            Math.seedrandom(randomSeed);
+            
+            const prompts = {
+                title: storyboard.title,
+                pages: []
+            };
+            
+            // Styles artistiques possibles
+            const artisticStyles = [
+                "style manga", "style comics américain", "style franco-belge", "style graphique épuré",
+                "style aquarelle", "style noir et blanc contrasté", "style ligne claire", "style réaliste",
+                "style semi-réaliste", "style cartoon", "style expressionniste", "style minimaliste"
+            ];
+            
+            // Ambiances possibles
+            const moods = [
+                "ambiance sombre et mystérieuse", "atmosphère lumineuse et optimiste", 
+                "tons sépia nostalgiques", "couleurs vives et saturées", 
+                "palette monochrome", "contraste dramatique", "éclairage cinématographique",
+                "ambiance cyberpunk néon", "atmosphère post-apocalyptique", "tons pastel doux"
+            ];
+            
+            // Influences artistiques
+            const artisticInfluences = [
+                "dans le style de Moebius", "inspiré par Otomo", "à la manière de Bilal",
+                "comme dessiné par Hergé", "dans la tradition de Jack Kirby", "façon Dave McKean",
+                "inspiré de l'art de Juanjo Guarnido", "à la Frank Miller", "comme Mike Mignola",
+                "dans le style de Studio Ghibli"
+            ];
+            
+            // Générer un prompt pour chaque page
+            for (const page of storyboard.pages) {
+                const pagePrompts = [];
+                
+                // Sélectionner un style artistique pour cette page
+                const style = artisticStyles[Math.floor(Math.random() * artisticStyles.length)];
+                const mood = moods[Math.floor(Math.random() * moods.length)];
+                const influence = artisticInfluences[Math.floor(Math.random() * artisticInfluences.length)];
+                
+                // Générer un prompt pour chaque panel
+                for (let i = 0; i < page.panels.length; i++) {
+                    const panel = page.panels[i];
+                    
+                    // Construire le prompt Midjourney
+                    let prompt = panel.description;
+                    
+                    // Ajouter des détails techniques et artistiques
+                    prompt += `, ${style}, ${mood}, ${influence}, haute qualité, richesse de détails`;
+                    
+                    // Ajouter des paramètres Midjourney
+                    prompt += " --ar 16:9 --v 5";
+                    
+                    pagePrompts.push(prompt);
+                }
+                
+                prompts.pages.push({
+                    pageNumber: page.pageNumber,
+                    prompts: pagePrompts
+                });
+            }
+            
+            return prompts;
+        }
+        
+        function generateEnhancedStory(keywords) {
+            // Créer un facteur d'aléatoire basé sur l'horodatage actuel et un nombre aléatoire
+            const timestamp = new Date().getTime();
+            const randomSeed = timestamp + "-" + Math.floor(Math.random() * 1000000);
+            
+            // Initialiser le générateur de nombres pseudo-aléatoires avec notre seed
+            Math.seedrandom(randomSeed);
+            
+            // Traitement des mots-clés
+            const keywordsList = keywords.split(',').map(k => k.trim()).filter(k => k !== '');
+            
+            // Genres possibles
+            const genres = ["science-fiction", "fantasy", "dystopie", "post-apocalyptique", "steampunk", "cyberpunk", "historique", "contemporain", "thriller", "aventure"];
+            
+            // Thèmes possibles
+            const themes = ["identité", "liberté", "pouvoir", "technologie", "nature", "société", "famille", "amour", "trahison", "rédemption", "sacrifice", "révolution"];
+            
+            // Déterminer le genre principal en fonction des mots-clés ou choisir aléatoirement
+            let mainGenre = "";
+            for (const keyword of keywordsList) {
+                if (genres.includes(keyword.toLowerCase())) {
+                    mainGenre = keyword.toLowerCase();
+                    break;
+                }
+            }
+            if (!mainGenre) {
+                mainGenre = genres[Math.floor(Math.random() * genres.length)];
+            }
+            
+            // Sélectionner des thèmes
+            const selectedThemes = [];
+            for (const keyword of keywordsList) {
+                if (themes.includes(keyword.toLowerCase())) {
+                    selectedThemes.push(keyword.toLowerCase());
+                }
+            }
+            
+            // Compléter avec des thèmes aléatoires si nécessaire
+            while (selectedThemes.length < 3) {
+                const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+                if (!selectedThemes.includes(randomTheme)) {
+                    selectedThemes.push(randomTheme);
+                }
+            }
+            
+            // Générer un titre
+            const titlePrefixes = ["Les Chroniques de", "L'Ère de", "Le Secret de", "La Quête de", "L'Odyssée de", "Le Mystère de", "La Légende de", "L'Éveil de", "La Chute de", "Le Destin de"];
+            const titleSuffixes = ["l'Aube", "l'Ombre", "la Destinée", "l'Infini", "la Rédemption", "la Révolution", "l'Espoir", "la Renaissance", "la Résistance", "l'Harmonie"];
+            
+            let title = "";
+            if (Math.random() > 0.5) {
+                title = `${titlePrefixes[Math.floor(Math.random() * titlePrefixes.length)]} ${keywordsList[0] || mainGenre}`;
+            } else {
+                title = `${keywordsList[0] || mainGenre}: ${titleSuffixes[Math.floor(Math.random() * titleSuffixes.length)]}`;
+            }
+            
+            // Capitaliser le titre
+            title = title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            
+            // Générer des noms pour les personnages
+            const firstNames = ["Alex", "Morgan", "Jordan", "Casey", "Taylor", "Riley", "Quinn", "Avery", "Cameron", "Reese"];
+            const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia", "Rodriguez", "Wilson"];
+            
+            const protagonistName = `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+            const antagonistName = `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+            
+            // Descriptions des personnages
+            const protagonistTraits = ["courageux/se", "intelligent/e", "déterminé/e", "idéaliste", "rebelle", "pragmatique", "empathique", "stratège", "charismatique", "visionnaire"];
+            const antagonistTraits = ["ambitieux/se", "manipulateur/trice", "brillant/e", "impitoyable", "charismatique", "obsessionnel/le", "calculateur/trice", "visionnaire", "vengeur/euse", "idéaliste corrompu/e"];
+            
+            const protagonist = {
+                name: protagonistName,
+                description: `Un/e ${protagonistTraits[Math.floor(Math.random() * protagonistTraits.length)]} ${protagonistTraits[Math.floor(Math.random() * protagonistTraits.length)]} qui cherche à ${Math.random() > 0.5 ? "protéger" : "changer"} le monde.`
+            };
+            
+            const antagonist = {
+                name: antagonistName,
+                description: `Un/e ${antagonistTraits[Math.floor(Math.random() * antagonistTraits.length)]} ${antagonistTraits[Math.floor(Math.random() * antagonistTraits.length)]} dont les actions menacent l'équilibre du monde.`
+            };
+            
+            // Lieux possibles
+            const locations = [
+                "une métropole futuriste", "un royaume médiéval", "une colonie spatiale", 
+                "une ville post-apocalyptique", "un monde parallèle", "une cité souterraine", 
+                "une île mystérieuse", "une station orbitale", "un désert infini", "une forêt enchantée"
+            ];
+            
+            const mainLocation = locations[Math.floor(Math.random() * locations.length)];
+            
+            // Créer l'objet histoire
+            const story = {
+                title: title,
+                genre: mainGenre,
+                themes: selectedThemes,
+                keywords: keywordsList,
+                protagonist: protagonist,
+                antagonist: antagonist,
+                mainLocation: mainLocation,
+                chapters: [],
+                timestamp: timestamp,
+                randomSeed: randomSeed
+            };
+            
+            // Générer les chapitres
+            // Chapitre 1: Introduction
+            story.chapters.push({
+                title: "Un Monde en Mutation",
+                content: `Dans ${mainLocation}, ${protagonist.name} mène une vie relativement ordinaire jusqu'à ce qu'un événement lié à ${keywordsList[0] || mainGenre} vienne bouleverser son quotidien.
+                
+                Cet incident révèle l'existence d'une menace incarnée par ${antagonist.name}, dont les actions sont motivées par une vision radicale concernant ${keywordsList[0] || mainGenre}.
+                
+                Ce premier chapitre pose les bases du monde et introduit les personnages principaux, tout en établissant le ton ${mainGenre} de l'histoire et en semant les graines des thèmes de ${selectedThemes[0]} et ${selectedThemes[1]} qui seront explorés tout au long du récit.`
+            });
+            
+            // Chapitre 2: L'Appel à l'aventure
+            story.chapters.push({
+                title: "L'Appel du Destin",
+                content: `${protagonist.name} est confronté(e) à un choix crucial qui le/la pousse à quitter sa zone de confort. Un mentor ou un allié inattendu apparaît pour le/la guider dans cette nouvelle voie.
+                
+                Les premières épreuves se présentent, mettant à l'épreuve la détermination de ${protagonist.name} et révélant davantage sur la nature de ${antagonist.name} et ses motivations liées à ${keywordsList[1] || keywordsList[0]}.
+                
+                Ce chapitre développe le thème de ${selectedThemes[2]} à travers les choix difficiles que doit faire ${protagonist.name}, tout en approfondissant l'univers ${mainGenre} dans lequel se déroule l'histoire.`
+            });
+            
+            // Chapitre 3: Refus de l'appel
+            story.chapters.push({
+                title: "Hésitations et Doutes",
+                content: `Face à l'ampleur de la tâche qui l'attend, ${protagonist.name} hésite et tente de fuir ses responsabilités. Les conséquences de ce refus se font rapidement sentir, affectant non seulement sa vie mais aussi celle de ses proches.
+                
+                ${antagonist.name} profite de cette période de doute pour renforcer son emprise sur ${mainLocation}, exploitant le pouvoir de ${keywordsList[0]} à des fins néfastes.
+                
+                Ce chapitre explore les faiblesses de ${protagonist.name} et les conséquences de l'inaction, tout en développant la menace représentée par ${antagonist.name} et ses alliés.`
+            });
+            
+            // Chapitre 4: Rencontre avec le mentor
+            story.chapters.push({
+                title: "Le Guide",
+                content: `${protagonist.name} rencontre un mentor qui lui révèle des vérités cachées sur ${keywordsList[0]} et lui enseigne les compétences nécessaires pour affronter les défis à venir.
+                
+                Cette figure de sagesse partage son expérience et aide ${protagonist.name} à comprendre la véritable nature de sa quête, ainsi que les enjeux plus larges qui dépassent ses préoccupations personnelles.
+                
+                Ce chapitre approfondit l'univers de l'histoire en révélant son histoire et ses règles, tout en développant le thème de ${selectedThemes[0]} à travers la transmission de connaissances et la croissance personnelle.`
+            });
+            
+            // Chapitre 5: Franchissement du seuil
+            story.chapters.push({
+                title: "Le Point de Non-Retour",
+                content: `${protagonist.name} s'engage pleinement dans l'aventure, franchissant un seuil symbolique qui marque son entrée dans un monde inconnu. Ce passage s'accompagne souvent d'une épreuve ou d'un sacrifice.
+                
+                De nouveaux alliés rejoignent ${protagonist.name} dans sa quête, chacun apportant des compétences uniques et des perspectives différentes sur les thèmes de ${selectedThemes.join(', ')}.
+                
+                Ce chapitre marque une accélération du rythme narratif et établit clairement les enjeux de l'histoire, tout en développant les relations entre les personnages.`
+            });
+            
+            // Chapitre 6: Épreuves, alliés et ennemis
+            story.chapters.push({
+                title: "Alliés et Adversaires",
+                content: `${protagonist.name} et ses compagnons font face à une série d'épreuves qui testent leurs capacités et leur détermination. Ces défis révèlent les forces et les faiblesses de chacun.
+                
+                De nouveaux antagonistes apparaissent, compliquant la mission de ${protagonist.name} et révélant la complexité du plan de ${antagonist.name} concernant ${keywordsList[0]} et ${keywordsList[1] || keywordsList[0]}.
+                
+                Ce chapitre développe les personnages secondaires et enrichit l'univers de l'histoire, tout en explorant les thèmes de ${selectedThemes[1]} et ${selectedThemes[2]} à travers les différentes épreuves.`
+            });
+            
+            // Chapitre 7: Approche de la caverne
+            story.chapters.push({
+                title: "Préparatifs",
+                content: `${protagonist.name} et ses alliés se préparent pour la confrontation majeure à venir. Ils élaborent un plan, rassemblent des ressources et renforcent leurs liens.
+                
+                Des révélations sur le passé de ${protagonist.name} ou de ${antagonist.name} apportent un nouvel éclairage sur leur conflit et sur les thèmes de ${selectedThemes.join(' et ')}.
+                
+                Ce chapitre crée une tension croissante et approfondit les motivations des personnages, tout en préparant le terrain pour le point culminant de l'histoire.`
+            });
+            
+            // Chapitre 8: L'épreuve suprême
+            story.chapters.push({
+                title: "La Confrontation",
+                content: `${protagonist.name} affronte ${antagonist.name} dans une première confrontation majeure. Cette épreuve représente un moment de crise où tout semble perdu.
+                
+                Un sacrifice important est souvent nécessaire, et ${protagonist.name} doit puiser dans ses ressources les plus profondes pour survivre à cette épreuve liée à ${keywordsList[0]}.
+                
+                Ce chapitre constitue le point médian de l'histoire et marque un tournant décisif dans le développement du protagoniste et dans sa compréhension des enjeux.`
+            });
+            
+            // Chapitre 9: Récompense
+            story.chapters.push({
+                title: "Victoire Temporaire",
+                content: `Ayant survécu à l'épreuve, ${protagonist.name} obtient une récompense : un objet, une connaissance, une réconciliation ou une reconnaissance qui change sa perspective.
+                
+                Ce moment de répit permet d'explorer les conséquences de la confrontation et de préparer la prochaine phase du conflit avec ${antagonist.name} autour de ${keywordsList[0]}.
+                
+                Ce chapitre approfondit les thèmes de ${selectedThemes[0]} et ${selectedThemes[1]} à travers les réflexions de ${protagonist.name} sur son parcours et ses découvertes.`
+            });
+            
+            // Chapitre 10: Le chemin du retour
+            story.chapters.push({
+                title: "Retournements",
+                content: `${protagonist.name} doit faire face aux conséquences de ses actions et se préparer pour l'affrontement final. De nouveaux obstacles surgissent, souvent plus personnels et liés aux thèmes de ${selectedThemes.join(' et ')}.
+                
+                ${antagonist.name} revient plus puissant qu'avant, ayant tiré les leçons de sa défaite et adapté sa stratégie concernant ${keywordsList[0]}.
+                
+                Ce chapitre intensifie les enjeux et pousse ${protagonist.name} à intégrer pleinement les leçons apprises tout au long de son parcours.`
+            });
+            
+            // Chapitre 11: Résurrection
+            story.chapters.push({
+                title: "L'Ultime Épreuve",
+                content: `${protagonist.name} affronte ${antagonist.name} dans la bataille finale. Cette confrontation représente l'apogée de l'histoire et la résolution du conflit central autour de ${keywordsList[0]}.
+                
+                ${protagonist.name} doit mettre en pratique tout ce qu'il/elle a appris et faire un choix décisif qui reflète sa transformation et sa compréhension des thèmes de ${selectedThemes.join(', ')}.
+                
+                Ce chapitre représente le climax émotionnel et narratif de l'histoire, avec les plus grands enjeux et les révélations les plus importantes.`
+            });
+            
+            // Chapitre 12: Retour avec l'élixir
+            story.chapters.push({
+                title: "Un Nouveau Monde",
+                content: `Après la résolution du conflit, ${protagonist.name} revient transformé(e) par son voyage. Le monde a également changé, reflétant les conséquences des événements liés à ${keywordsList[0]}.
+                
+                Ce chapitre explore comment les thèmes de ${selectedThemes.join(', ')} ont été résolus ou transformés à travers le parcours des personnages.
+                
+                L'histoire se conclut en montrant comment ${protagonist.name} intègre les leçons apprises dans sa nouvelle vie, tout en laissant entrevoir les changements durables apportés à ${mainLocation} et à ses habitants.`
+            });
+            
+            // Générer le storyboard et les prompts
+            story.storyboard = generateStoryboard(story, randomSeed);
+            
+            // Générer les prompts
+            story.prompts = generatePrompts(story.storyboard, randomSeed);
+            
+            return story;
+        }
+        
+        // Gestion des sessions
+        function saveSession(data) {
+            const sessionData = JSON.stringify(data);
+            localStorage.setItem('bdCreatorSession', sessionData);
+            alert('Session sauvegardée avec succès !');
+        }
+        
+        function loadSession() {
+            const sessionData = localStorage.getItem('bdCreatorSession');
+            if (sessionData) {
+                return JSON.parse(sessionData);
+            }
+            return null;
+        }
+        
+        function newSession() {
+            if (confirm('Êtes-vous sûr de vouloir commencer une nouvelle session ? Toutes les données non sauvegardées seront perdues.')) {
+                currentStory = null;
+                document.getElementById('keywords').value = '';
+                document.getElementById('scenario-content').innerHTML = '<p>Votre scénario apparaîtra ici après génération.</p>';
+                document.getElementById('storyboard-content').innerHTML = '<p>Votre storyboard apparaîtra ici après génération.</p>';
+                document.getElementById('prompts-content').innerHTML = '<p>Vos prompts apparaîtront ici après génération.</p>';
+                
+                // Réinitialiser les numéros de page
+                currentScenarioPage = 1;
+                currentStoryboardPage = 1;
+                currentPromptPage = 1;
+                updatePageNumbers();
+            }
+        }
+        
+        // Variables globales
+        let currentStory = null;
+        let currentScenarioPage = 1;
+        let currentStoryboardPage = 1;
+        let currentPromptPage = 1;
+        
+        // Fonction pour mettre à jour les numéros de page
+        function updatePageNumbers() {
+            document.getElementById('scenarioPageNumber').textContent = `Page ${currentScenarioPage} / 48`;
+            document.getElementById('storyboardPageNumber').textContent = `Page ${currentStoryboardPage} / 48`;
+            document.getElementById('promptPageNumber').textContent = `Page ${currentPromptPage} / 48`;
+        }
+        
+        // Fonction pour afficher le contenu du scénario
+        function displayScenario(page) {
+            if (!currentStory) return;
+            
+            const content = document.getElementById('scenario-content');
+            
+            if (page === 1) {
+                // Page de titre
+                content.innerHTML = `
+                    <h3>${currentStory.title}</h3>
+                    <p><strong>Genre:</strong> ${currentStory.genre}</p>
+                    <p><strong>Thèmes:</strong> ${currentStory.themes.join(', ')}</p>
+                    <p><strong>Protagoniste:</strong> ${currentStory.protagonist.name} - ${currentStory.protagonist.description}</p>
+                    <p><strong>Antagoniste:</strong> ${currentStory.antagonist.name} - ${currentStory.antagonist.description}</p>
+                    <p><strong>Lieu principal:</strong> ${currentStory.mainLocation}</p>
+                `;
+            } else if (page <= currentStory.chapters.length + 1) {
+                // Pages de chapitres
+                const chapterIndex = page - 2;
+                const chapter = currentStory.chapters[chapterIndex];
+                
+                content.innerHTML = `
+                    <h3>Chapitre ${chapterIndex + 1}: ${chapter.title}</h3>
+                    <p>${chapter.content.replace(/\n/g, '<br>')}</p>
+                `;
+            } else {
+                // Pages vides
+                content.innerHTML = `<p>Page ${page} - Contenu à venir</p>`;
+            }
+        }
+        
+        // Fonction pour afficher le contenu du storyboard
+        function displayStoryboard(page) {
+            if (!currentStory || !currentStory.storyboard) return;
+            
+            const content = document.getElementById('storyboard-content');
+            
+            // Trouver la page correspondante dans le storyboard
+            const storyboardPage = currentStory.storyboard.pages.find(p => p.pageNumber === page);
+            
+            if (storyboardPage) {
+                let html = `<h3>Page ${storyboardPage.pageNumber}</h3>`;
+                html += `<p><strong>Description:</strong> ${storyboardPage.description}</p>`;
+                
+                html += '<div class="panels">';
+                storyboardPage.panels.forEach((panel, index) => {
+                    html += `
+                        <div class="panel">
+                            <h4>Case ${index + 1}</h4>
+                            <p><strong>Description:</strong> ${panel.description}</p>
+                            ${panel.dialogue ? `<p><strong>Dialogue:</strong> ${panel.dialogue}</p>` : ''}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                
+                content.innerHTML = html;
+            } else {
+                content.innerHTML = `<p>Page ${page} - Contenu à venir</p>`;
+            }
+        }
+        
+        // Fonction pour afficher les prompts
+        function displayPrompts(page) {
+            if (!currentStory || !currentStory.prompts) return;
+            
+            const content = document.getElementById('prompts-content');
+            
+            // Trouver la page correspondante dans les prompts
+            const promptPage = currentStory.prompts.pages.find(p => p.pageNumber === page);
+            
+            if (promptPage) {
+                let html = `<h3>Prompts pour la page ${promptPage.pageNumber}</h3>`;
+                
+                promptPage.prompts.forEach((prompt, index) => {
+                    html += `
+                        <div class="prompt">
+                            <h4>Prompt pour la case ${index + 1}</h4>
+                            <p>${prompt}</p>
+                        </div>
+                    `;
+                });
+                
+                content.innerHTML = html;
+            } else {
+                content.innerHTML = `<p>Page ${page} - Prompts à venir</p>`;
+            }
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion des onglets
+            const tabLinks = document.querySelectorAll('.tab-link');
+            
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Désactiver tous les onglets
+                    tabLinks.forEach(l => l.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                    
+                    // Activer l'onglet cliqué
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Gestion de la génération
+            document.getElementById('generateBtn').addEventListener('click', function() {
+                const keywords = document.getElementById('keywords').value.trim();
+                
+                if (keywords === '') {
+                    alert('Veuillez entrer au moins un mot-clé.');
+                    return;
+                }
+                
+                // Générer le scénario
+                currentStory = generateEnhancedStory(keywords);
+                
+                // Afficher le contenu
+                currentScenarioPage = 1;
+                currentStoryboardPage = 1;
+                currentPromptPage = 1;
+                
+                displayScenario(currentScenarioPage);
+                displayStoryboard(currentStoryboardPage);
+                displayPrompts(currentPromptPage);
+                
+                updatePageNumbers();
+                
+                // Activer l'onglet Scénario
+                tabLinks.forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                
+                document.querySelector('[data-tab="scenario"]').classList.add('active');
+                document.getElementById('scenario').classList.add('active');
+            });
+            
+            // Gestion de la pagination du scénario
+            document.getElementById('prevScenarioPage').addEventListener('click', function() {
+                if (currentScenarioPage > 1) {
+                    currentScenarioPage--;
+                    displayScenario(currentScenarioPage);
+                    updatePageNumbers();
+                }
+            });
+            
+            document.getElementById('nextScenarioPage').addEventListener('click', function() {
+                if (currentScenarioPage < 48) {
+                    currentScenarioPage++;
+                    displayScenario(currentScenarioPage);
+                    updatePageNumbers();
+                }
+            });
+            
+            // Gestion de la pagination du storyboard
+            document.getElementById('prevStoryboardPage').addEventListener('click', function() {
+                if (currentStoryboardPage > 1) {
+                    currentStoryboardPage--;
+                    displayStoryboard(currentStoryboardPage);
+                    updatePageNumbers();
+                }
+            });
+            
+            document.getElementById('nextStoryboardPage').addEventListener('click', function() {
+                if (currentStoryboardPage < 48) {
+                    currentStoryboardPage++;
+                    displayStoryboard(currentStoryboardPage);
+                    updatePageNumbers();
+                }
+            });
+            
+            // Gestion de la pagination des prompts
+            document.getElementById('prevPromptPage').addEventListener('click', function() {
+                if (currentPromptPage > 1) {
+                    currentPromptPage--;
+                    displayPrompts(currentPromptPage);
+                    updatePageNumbers();
+                }
+            });
+            
+            document.getElementById('nextPromptPage').addEventListener('click', function() {
+                if (currentPromptPage < 48) {
+                    currentPromptPage++;
+                    displayPrompts(currentPromptPage);
+                    updatePageNumbers();
+                }
+            });
+            
+            // Gestion des sessions
+            document.getElementById('saveSessionBtn').addEventListener('click', function() {
+                if (currentStory) {
+                    saveSession({
+                        story: currentStory,
+                        scenarioPage: currentScenarioPage,
+                        storyboardPage: currentStoryboardPage,
+                        promptPage: currentPromptPage,
+                        keywords: document.getElementById('keywords').value
+                    });
+                } else {
+                    alert('Aucune session à sauvegarder. Veuillez d\'abord générer un scénario.');
+                }
+            });
+            
+            document.getElementById('loadSessionBtn').addEventListener('click', function() {
+                const session = loadSession();
+                if (session) {
+                    currentStory = session.story;
+                    currentScenarioPage = session.scenarioPage || 1;
+                    currentStoryboardPage = session.storyboardPage || 1;
+                    currentPromptPage = session.promptPage || 1;
+                    
+                    document.getElementById('keywords').value = session.keywords || '';
+                    
+                    displayScenario(currentScenarioPage);
+                    displayStoryboard(currentStoryboardPage);
+                    displayPrompts(currentPromptPage);
+                    
+                    updatePageNumbers();
+                    
+                    alert('Session chargée avec succès !');
+                } else {
+                    alert('Aucune session sauvegardée trouvée.');
+                }
+            });
+            
+            document.getElementById('newSessionBtn').addEventListener('click', newSession);
+            
+            // Charger une session existante au démarrage
+            const session = loadSession();
+            if (session) {
+                currentStory = session.story;
+                currentScenarioPage = session.scenarioPage || 1;
+                currentStoryboardPage = session.storyboardPage || 1;
+                currentPromptPage = session.promptPage || 1;
+                
+                document.getElementById('keywords').value = session.keywords || '';
+                
+                displayScenario(currentScenarioPage);
+                displayStoryboard(currentStoryboardPage);
+                displayPrompts(currentPromptPage);
+                
+                updatePageNumbers();
+            }
+        });
+        
+        // Polyfill pour Math.seedrandom
+        (function(global, pool, math) {
+            math['seedrandom'] = function(seed, options, callback) {
+                var key = [];
+                options = (options == true) ? { entropy: true } : (options || {});
+                
+                var shortseed = mixkey(flatten(
+                    options.entropy ? [seed, tostring(pool)] :
+                    (seed == null) ? autoseed() : seed, 3), key);
+                
+                var arc4 = new ARC4(key);
+                
+                var prng = function() {
+                    var n = arc4.g(6);
+                    var d = 281474976710656;
+                    var r = n / d;
+                    return r;
+                };
+                
+                prng.int32 = function() { return arc4.g(4) | 0; };
+                prng.quick = function() { return arc4.g(4) / 0x100000000; };
+                prng.double = prng;
+                
+                mixkey(tostring(arc4.S), pool);
+                
+                return (options.pass || callback ||
+                    function(prng, seed, is_math_call, state) {
+                        if (state) {
+                            if (state.S) { copy(state, arc4); }
+                            prng.state = function() { return copy(arc4, {}); };
+                        }
+                        
+                        if (is_math_call) { math[global] = prng; return seed; }
+                        else return prng;
+                    })(
+                    prng,
+                    shortseed,
+                    'global' in options ? options.global : (this == math),
+                    options.state);
+            };
+            
+            function ARC4(key) {
+                var t, keylen = key.length,
+                    me = this, i = 0, j = me.i = me.j = 0, s = me.S = [];
+                
+                if (!keylen) { key = [keylen++]; }
+                
+                while (i < 256) {
+                    s[i] = i++;
+                }
+                for (i = 0; i < 256; i++) {
+                    s[i] = s[j = mask & (j + key[i % keylen] + (t = s[i]))];
+                    s[j] = t;
+                }
+                
+                (me.g = function(count) {
+                    var t, r = 0,
+                        i = me.i, j = me.j, s = me.S;
+                    while (count--) {
+                        t = s[i = mask & (i + 1)];
+                        r = r * 256 + s[mask & ((s[i] = s[j = mask & (j + t)]) + (s[j] = t))];
+                    }
+                    me.i = i; me.j = j;
+                    return r;
+                })(256);
+            }
+            
+            function copy(f, t) {
+                t.i = f.i;
+                t.j = f.j;
+                t.S = f.S.slice();
+                return t;
+            }
+            
+            function flatten(obj, depth) {
+                var result = [], typ = (typeof obj), prop;
+                if (depth && typ == 'object') {
+                    for (prop in obj) {
+                        try { result.push(flatten(obj[prop], depth - 1)); } catch (e) {}
+                    }
+                }
+                return (result.length ? result : typ == 'string' ? obj : obj + '\0');
+            }
+            
+            function mixkey(seed, key) {
+                var stringseed = seed + '', smear, j = 0;
+                while (j < stringseed.length) {
+                    key[mask & j] =
+                        mask & ((smear ^= key[mask & j] * 19) + stringseed.charCodeAt(j++));
+                }
+                return tostring(key);
+            }
+            
+            function autoseed() {
+                try {
+                    var out;
+                    if (nodecrypto && (out = nodecrypto.randomBytes)) {
+                        out = out(256);
+                    } else {
+                        out = new Uint8Array(256);
+                        (global.crypto || global.msCrypto).getRandomValues(out);
+                    }
+                    return tostring(out);
+                } catch (e) {
+                    var browser = global.navigator,
+                        plugins = browser && browser.plugins;
+                    return [+new Date, global, plugins, global.screen, tostring(pool)];
+                }
+            }
+            
+            function tostring(a) {
+                return String.fromCharCode.apply(0, a);
+            }
+            
+            var mask = 255;
+            var nodecrypto;
+            
+            try {
+                if (nodecrypto = require('crypto')) {
+                    nodecrypto = nodecrypto.randomBytes;
+                }
+            } catch (ex) {}
+            
+            mixkey(math.random(), pool);
+            
+        })(
+            'random',
+            [],
+            Math
+        );
+    </script>
+</body>
+</html>
